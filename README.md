@@ -21,9 +21,39 @@ The contact links are live:
 The WhatsApp link takes the number in international format with no `+`, spaces or
 dashes, which is why `+880 1822-392916` is written `8801822392916`.
 
-One placeholder is left — the domain, in `canonical`, `og:url`, `og:image` and
-`robots.txt`, currently `https://www.mrsdentalshop.com/`. It only affects how
-the page looks when shared and how search engines index it, not the page itself.
+The domain is `https://www.mrsdentalshop.com/`, already set in `canonical`,
+`og:url`, `og:image` and `robots.txt`. The one thing left is `og:image` — the
+logo is nearly square and gets cropped in link previews, so a 1200x630 share
+image would look better.
+
+## Hosting on GitHub Pages
+
+`CNAME` in the repo root holds the custom domain. GitHub Pages reads it
+automatically — do not delete or rename it.
+
+Two steps happen outside this repo:
+
+**1. Enable Pages** — repo Settings → Pages → Source: *Deploy from a branch*,
+branch `main`, folder `/ (root)`. The custom domain fills itself in from
+`CNAME`. Tick **Enforce HTTPS** once the certificate is issued.
+
+**2. DNS at Namecheap** (where the domain is currently parked) — Domain List →
+Manage → Advanced DNS. Remove the parking records first, then add:
+
+| Type | Host | Value |
+|---|---|---|
+| CNAME | `www` | `mostakim3157.github.io.` |
+| A | `@` | `185.199.108.153` |
+| A | `@` | `185.199.109.153` |
+| A | `@` | `185.199.110.153` |
+| A | `@` | `185.199.111.153` |
+
+The four A records point the bare domain at GitHub, which then redirects to
+`www`. IPv6 is optional: AAAA `@` to `2606:50c0:8000::153` through
+`2606:50c0:8003::153`.
+
+DNS usually propagates in minutes but can take up to 24 hours, and the HTTPS
+certificate is only issued after it resolves.
 
 ## Viewing it locally
 
