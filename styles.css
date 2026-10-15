@@ -1,0 +1,648 @@
+/* ============================================================
+   MRS Dental Shop — coming soon page
+
+   A direct port of the two Design artboards:
+     base styles      = Mobile.dc.html   (390 x 844)
+     >= 760px         = Main.dc.html     (desktop, 100vh)
+
+   Values that differ between the two boards are carried as custom
+   properties so a single set of keyframes serves both.
+   ============================================================ */
+
+:root {
+  --accent:        #F7941D;  /* logo orange */
+  --accent-deep:   #C25307;  /* orange, dark enough for icons on white */
+  --accent-alt:    #1570CD;  /* logo blue */
+  --accent-alt-dk: #0E5AA8;
+
+  --ink:           #0B2239;
+  --ink-soft:      #3C5670;
+  --ink-faint:     #4A627A;
+  --card-bg:       #FFFFFF;
+
+  /* Per-board animation values — overridden in the desktop block. */
+  --rise-to:    -190px;
+  --up-from:     18px;
+  --letter-y:    24px;
+  --letter-rot: -75deg;
+  --pop-y:       22px;
+  --pop-scale:   .85;
+  --pop-blur:    14px;
+  --float-y:     -8px;
+  --emblem-top:  45%;   /* the mobile board sits the emblem high */
+
+  /* Logo card offset from the emblem's centre. 0% = dead centre;
+     15% puts its right edge level with the outer ring; past that it
+     clears the ring entirely. The mobile emblem is a fixed 300px, so
+     25% is about as far as the card can go here before it reaches the
+     page gutter — the desktop block pushes further. */
+  --logo-shift-x: 25%;
+}
+
+/* The emblem is a fixed 300px, so on a very narrow phone the full shift
+   would carry the card's right edge off-screen. Ease it back there. */
+@media (max-width: 359px) {
+  :root { --logo-shift-x: 12%; }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: #F4F9FE;
+  color: var(--ink);
+  font-family: Manrope, "Segoe UI", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent-alt-dk); }
+a:hover { color: #0B4683; }
+
+img { max-width: 100%; }
+
+
+/* ============================================================
+   STAGE
+   ============================================================ */
+
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;          /* so a mobile URL bar cannot clip the footer */
+  padding: 40px 22px 60px;   /* bottom reserves room for the pinned footer */
+  overflow: hidden;
+  background: radial-gradient(130% 70% at 50% 0%, #FFFFFF 0%, #F1F7FD 48%, #E6EFF9 100%);
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  width: 100%;
+  text-align: center;
+}
+
+
+/* ============================================================
+   BACKGROUND
+   ============================================================ */
+
+.aurora { position: absolute; inset: 0; pointer-events: none; }
+
+.blob { position: absolute; border-radius: 50%; filter: blur(56px); }
+
+.blob--a {
+  width: 360px; height: 360px; top: -120px; left: -110px; opacity: .32;
+  background: radial-gradient(circle, var(--accent) 0%, rgba(247,148,29,0) 68%);
+  animation: drift-a 22s ease-in-out infinite;
+}
+.blob--b {
+  width: 420px; height: 420px; bottom: -160px; right: -140px; opacity: .3;
+  background: radial-gradient(circle, var(--accent-alt) 0%, rgba(21,112,205,0) 68%);
+  animation: drift-b 28s ease-in-out infinite;
+}
+.blob--c { display: none; }   /* desktop board only */
+
+@keyframes drift-a {
+  0%, 100% { transform: translate3d(0,0,0) scale(1); }
+  50%      { transform: translate3d(var(--drift-a-x, 50px), var(--drift-a-y, -40px), 0) scale(var(--drift-a-s, 1.2)); }
+}
+@keyframes drift-b {
+  0%, 100% { transform: translate3d(0,0,0) scale(var(--drift-b-s0, 1.08)); }
+  50%      { transform: translate3d(var(--drift-b-x, -44px), var(--drift-b-y, 36px), 0) scale(var(--drift-b-s, .9)); }
+}
+@keyframes drift-c {
+  0%, 100% { transform: translate3d(0,0,0) rotate(0deg) scale(1); }
+  50%      { transform: translate3d(50px,70px,0) rotate(24deg) scale(1.12); }
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(11,34,57,.07) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(72% 55% at 50% 42%, #000 0%, transparent 88%);
+          mask-image: radial-gradient(72% 55% at 50% 42%, #000 0%, transparent 88%);
+}
+
+.sparks { position: absolute; inset: 0; pointer-events: none; }
+.sparks--desktop { display: none; }
+
+.sparks span {
+  position: absolute;
+  left: var(--x);
+  bottom: var(--y);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: var(--tint);
+  animation: rise var(--dur) linear var(--delay) infinite;
+}
+
+@keyframes rise {
+  0%   { opacity: 0;   transform: translateY(0) scale(.5); }
+  18%  { opacity: .8;  }
+  100% { opacity: 0;   transform: translateY(var(--rise-to)) scale(1.1); }
+}
+
+
+/* ============================================================
+   BADGE
+   ============================================================ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 8px 14px;
+  border: 1px solid rgba(21,112,205,.22);
+  border-radius: 999px;
+  background: rgba(255,255,255,.85);
+  box-shadow: 0 10px 26px -20px rgba(11,34,57,.6);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent-alt-dk);
+  animation: up .8s cubic-bezier(.22,1,.36,1) .1s backwards;
+}
+
+.badge__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(247,148,29,.22);
+}
+
+
+/* ============================================================
+   EMBLEM — logo card, rings, ripples, drawn tooth
+   ============================================================ */
+
+.emblem { position: relative; width: 300px; height: 234px; }
+
+/* Everything inside hangs off one anchor, raised on the mobile board. */
+.ring, .pulse, .tooth, .card {
+  position: absolute;
+  left: 50%;
+  top: var(--emblem-top);
+  transform: translate(-50%, -50%);
+}
+
+/* Only the card moves; the rings, ripples and tooth stay on centre.
+   `left` is never animated, so the pop/float keyframes still hold. */
+.card { left: calc(50% + var(--logo-shift-x, 0%)); }
+
+.ring { border-radius: 50%; }
+
+.ring--outer {
+  width: 215px; height: 215px;
+  border: 1.5px dashed rgba(21,112,205,.35);
+  animation: spin var(--spin-out, 24s) linear infinite;
+}
+.ring--inner {
+  width: 170px; height: 170px;
+  border: 2px solid transparent;
+  border-top-color: var(--accent);
+  border-right-color: rgba(247,148,29,.25);
+  animation: spin-rev var(--spin-in, 34s) linear infinite;
+}
+
+.pulse {
+  width: 158px; height: 158px;
+  border: 1px solid rgba(247,148,29,.55);
+  border-radius: 50%;
+  animation: ripple 4.4s ease-out infinite;
+}
+.pulse--2 { border-color: rgba(21,112,205,.45); animation-delay: 1.5s; }
+.pulse--3 { border-color: rgba(247,148,29,.35); animation-delay: 3s; }
+
+.tooth {
+  width: 200px;
+  height: auto;
+  opacity: .45;
+  animation: glow 7s ease-in-out infinite;
+}
+.tooth path {
+  stroke-dasharray: 620;
+  stroke-dashoffset: 620;
+  animation: draw var(--draw-dur, 2.6s) cubic-bezier(.65,0,.35,1) .25s forwards;
+}
+
+.card {
+  width: 192px;
+  padding: 18px 20px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--card-bg);
+  box-shadow: 0 24px 54px -26px rgba(11,34,57,.45);
+  animation: pop 1.05s cubic-bezier(.22,1,.36,1) .1s backwards,
+             float 7s ease-in-out 1.3s infinite;
+}
+
+.card img { display: block; width: 100%; height: auto; }
+
+.card__shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 42%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.85) 50%, rgba(255,255,255,0) 100%);
+  animation: shine 5.5s cubic-bezier(.5,0,.2,1) 1.8s infinite;
+}
+
+@keyframes spin     { to { transform: translate(-50%,-50%) rotate(360deg); } }
+@keyframes spin-rev { to { transform: translate(-50%,-50%) rotate(-360deg); } }
+@keyframes draw     { to { stroke-dashoffset: 0; } }
+@keyframes glow     { 0%, 100% { opacity: var(--glow-lo, .28); } 50% { opacity: var(--glow-hi, .66); } }
+
+@keyframes ripple {
+  0%   { opacity: .5; transform: translate(-50%,-50%) scale(.55); }
+  100% { opacity: 0;  transform: translate(-50%,-50%) scale(1.28); }
+}
+
+/* The centring offset is repeated in every frame — drop it and the card
+   leaves its anchor the moment either animation takes over. */
+@keyframes pop {
+  0%   { opacity: 0; transform: translate(-50%,-50%) translateY(var(--pop-y)) scale(var(--pop-scale)); filter: blur(var(--pop-blur)); }
+  70%  { filter: blur(0); }
+  100% { opacity: 1; transform: translate(-50%,-50%) translateY(0) scale(1); filter: blur(0); }
+}
+@keyframes float {
+  0%, 100% { transform: translate(-50%,-50%) translateY(0); }
+  50%      { transform: translate(-50%,-50%) translateY(var(--float-y)); }
+}
+@keyframes shine {
+  0%        { transform: translateX(-150%) skewX(-18deg); }
+  55%, 100% { transform: translateX(300%)  skewX(-18deg); }
+}
+
+
+/* ============================================================
+   HEADLINE
+   ============================================================ */
+
+.headline {
+  margin: 0;
+  font-family: Sora, Manrope, system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 40px;
+  line-height: 1.08;
+  letter-spacing: -.03em;
+  perspective: 600px;
+}
+
+.headline__desktop { display: none; }
+.headline__mobile .headline__ink,
+.headline__mobile .headline__rise { display: block; }
+
+.headline__ink { color: var(--ink); }
+
+.headline__ink span {
+  display: inline-block;
+  animation: letter .7s cubic-bezier(.2,.9,.25,1) backwards;
+  animation-delay: calc(var(--letter-start, .3s) + var(--i) * .04s);
+}
+
+.headline__rise {
+  display: inline-block;
+  animation: up .8s cubic-bezier(.22,1,.36,1) var(--rise-delay, .65s) backwards;
+}
+
+/* One element, plain text, nothing animated inside it — a clipped
+   gradient will not paint over animated children. */
+.headline__grad {
+  display: inline-block;
+  background-image: linear-gradient(100deg, #0E5AA8 0%, #1570CD 22%, #D2650C 50%, #1570CD 78%, #0E5AA8 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  animation: sweep 9s linear infinite;
+}
+
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .headline__grad { background-image: none; color: var(--accent-alt-dk); }
+}
+
+@keyframes letter {
+  0%   { opacity: 0; transform: translateY(var(--letter-y)) rotateX(var(--letter-rot)); }
+  100% { opacity: 1; transform: translateY(0) rotateX(0deg); }
+}
+@keyframes sweep {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+
+/* ============================================================
+   RULE, LEDE, PROGRESS
+   ============================================================ */
+
+.rule {
+  width: 140px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(21,112,205,0), var(--accent), var(--accent-alt), rgba(21,112,205,0));
+  transform-origin: center;
+  animation: grow .95s cubic-bezier(.22,1,.36,1) .9s backwards;
+}
+
+.lede {
+  max-width: 310px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  animation: up .8s cubic-bezier(.22,1,.36,1) 1s backwards;
+}
+
+.lede--desktop { display: none; }
+
+.progress {
+  width: 180px;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(11,34,57,.09);
+  animation: up .8s cubic-bezier(.22,1,.36,1) 1.1s backwards;
+}
+
+.progress span {
+  display: block;
+  width: 38%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-alt));
+  animation: track 2.3s cubic-bezier(.65,0,.35,1) infinite;
+}
+
+@keyframes grow  { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
+@keyframes track { 0% { transform: translateX(-105%); } 100% { transform: translateX(305%); } }
+
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.links {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 12px;
+  margin-top: clamp(6px, 1.4vh, 20px);   /* see the desktop block */
+  animation: up .8s cubic-bezier(.22,1,.36,1) 1.2s backwards;
+}
+
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 0 20px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform .26s cubic-bezier(.22,1,.36,1),
+              box-shadow .26s ease,
+              border-color .26s ease;
+}
+
+.btn:active { transform: translateY(-2px); }
+.btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+.btn__brand { width: 19px; height: 19px; flex: none; }
+.btn__arrow {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  transition: transform .26s cubic-bezier(.22,1,.36,1);
+}
+.btn:hover .btn__arrow { transform: translateX(5px); }
+
+.btn--fb {
+  background: linear-gradient(135deg, var(--accent-alt) 0%, var(--accent-alt-dk) 100%);
+  color: #FFFFFF;
+  box-shadow: 0 14px 28px -18px rgba(14,90,168,.9);
+}
+.btn--fb:hover { color: #FFFFFF; }
+
+.btn--wa {
+  background: var(--card-bg);
+  border-color: var(--accent);
+  color: var(--ink);
+  box-shadow: 0 14px 28px -22px rgba(11,34,57,.7);
+}
+.btn--wa:hover { color: var(--ink); }
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 22px;
+  z-index: 2;
+  width: 100%;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  color: var(--ink-faint);
+  animation: up .8s cubic-bezier(.22,1,.36,1) 1.35s backwards;
+}
+
+@keyframes up {
+  0%   { opacity: 0; transform: translateY(var(--up-from)); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ============================================================
+   DESKTOP BOARD — Main.dc.html
+   ============================================================ */
+
+@media (min-width: 760px) {
+
+  :root {
+    --rise-to:    -230px;
+    --up-from:     22px;
+    --letter-y:    32px;
+    --letter-rot: -78deg;
+    --pop-y:       26px;
+    --pop-scale:   .84;
+    --pop-blur:    16px;
+    --float-y:     -11px;
+    --emblem-top:  50%;
+
+    --drift-a-x: 90px;  --drift-a-y: -60px; --drift-a-s: 1.18;
+    --drift-b-x: -80px; --drift-b-y: 50px;  --drift-b-s: .88; --drift-b-s0: 1.05;
+
+    --spin-out: 26s;
+    --spin-in:  38s;
+    --draw-dur: 2.8s;
+    --glow-lo:  .30;
+    --glow-hi:  .70;
+
+    --letter-start: .35s;
+    --rise-delay:   .82s;
+
+    --logo-shift-x: 35%;   /* room to go further than the phone layout */
+  }
+
+  .stage {
+    height: 100vh;
+    min-height: 0;
+    padding: clamp(20px, 4vh, 64px) 24px clamp(52px, 7vh, 96px);
+    background: radial-gradient(130% 90% at 50% 0%, #FFFFFF 0%, #F1F7FD 45%, #E8F1FA 100%);
+  }
+
+  .content {
+    max-width: 980px;
+    gap: clamp(12px, 2.4vh, 34px);
+  }
+
+  /* Background */
+  .blob { filter: blur(70px); }
+  .blob--a { width: 620px; height: 620px; top: -220px; left: -160px; opacity: .30; animation-duration: 24s; }
+  .blob--b { width: 700px; height: 700px; bottom: -280px; right: -180px; opacity: .28; animation-duration: 30s; }
+  .blob--c {
+    display: block;
+    width: 480px; height: 480px; top: 38%; right: 22%; opacity: .22;
+    background: radial-gradient(circle, #7FC4FF 0%, rgba(127,196,255,0) 70%);
+    animation: drift-c 36s ease-in-out infinite;
+  }
+
+  .grid {
+    background-size: 26px 26px;
+    -webkit-mask-image: radial-gradient(70% 60% at 50% 45%, #000 0%, transparent 85%);
+            mask-image: radial-gradient(70% 60% at 50% 45%, #000 0%, transparent 85%);
+  }
+
+  .sparks--mobile  { display: none; }
+  .sparks--desktop { display: block; }
+  .sparks span { animation-name: rise; }
+
+  /* Badge */
+  .badge { gap: 10px; padding: 9px 18px; font-size: 12px; letter-spacing: .18em; background: rgba(255,255,255,.82); box-shadow: 0 10px 28px -20px rgba(11,34,57,.6); }
+  .badge__dot { width: 8px; height: 8px; box-shadow: 0 0 0 4px rgba(247,148,29,.22); }
+
+  /* Emblem */
+  .emblem {
+    width: min(100%, clamp(260px, 43vh, 580px));
+    height: auto;
+    aspect-ratio: 23 / 18;
+  }
+  .ring--outer { width: 92%; height: 92%; }
+  .ring--inner { width: 72%; height: 72%; }
+  .pulse       { width: 66%; height: 66%; }
+  .tooth       { width: 66%; }
+  .card {
+    width: 64%;
+    padding: 26px 30px;
+    border-radius: 22px;
+    box-shadow: 0 30px 70px -30px rgba(11,34,57,.45),
+                0 2px 0 rgba(255,255,255,.9) inset;
+  }
+
+  /* Headline — one line, lowercase tail */
+  .headline {
+    font-size: clamp(20px, min(4.2vw, 6.6vh), 58px);
+    line-height: 1.12;
+    white-space: nowrap;
+    perspective: 700px;
+  }
+  .headline__desktop { display: inline; }
+  .headline__mobile  { display: none; }
+
+  /* Rule, lede, progress */
+  .rule { width: 180px; animation-duration: 1s; animation-delay: .95s; }
+
+  .lede--mobile  { display: none; }
+  .lede--desktop {
+    display: block;
+    max-width: 580px;
+    font-size: clamp(13px, min(1.6vw, 2.1vh), 19px);
+    animation-delay: 1.05s;
+  }
+
+  .progress { width: 260px; animation-delay: 1.15s; }
+
+  /* Buttons */
+  .links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    /* Evens out the space above and below the row. The content block is
+       centred while the footer is pinned to the bottom, so as the window
+       grows the footer pulls away faster than the content does. This
+       margin widens the gap above by its full value and closes the gap
+       below by half of it; the px offset tracks the fixed-height items
+       (buttons, badge, footer) that do not scale with vh. */
+    margin-top: clamp(12px, 10vh - 46px, 80px);
+    animation-delay: 1.25s;
+  }
+
+  .btn {
+    gap: 9px;
+    min-height: 46px;
+    font-size: 14px;
+    transition: transform .28s cubic-bezier(.22,1,.36,1),
+                box-shadow .28s ease,
+                border-color .28s ease;
+  }
+  .btn:hover  { transform: translateY(-4px); }
+  .btn:active { transform: translateY(-1px); }
+
+  .btn__brand { width: 17px; height: 17px; }
+  .btn__arrow { width: 14px; height: 14px; transition: transform .28s cubic-bezier(.22,1,.36,1); }
+
+  .btn--fb { box-shadow: 0 14px 30px -18px rgba(14,90,168,.9); }
+  .btn--fb:hover { box-shadow: 0 18px 38px -14px rgba(14,90,168,.75); }
+
+  .btn--wa { box-shadow: 0 14px 30px -22px rgba(11,34,57,.7); }
+  .btn--wa:hover { border-color: var(--accent-deep); box-shadow: 0 18px 38px -14px rgba(242,99,34,.55); }
+
+  /* Footer */
+  .footer { bottom: clamp(16px, 3vh, 44px); font-size: 13px; animation-delay: 1.4s; }
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  /* Put back what the animations were holding. */
+  .ring, .pulse, .tooth, .card { transform: translate(-50%, -50%); }
+  .tooth path { stroke-dashoffset: 0; }
+  .sparks { display: none; }
+}
