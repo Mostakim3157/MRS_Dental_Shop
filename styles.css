@@ -76,7 +76,11 @@ img { max-width: 100%; }
   width: 100%;
   min-height: 100vh;
   min-height: 100svh;          /* so a mobile URL bar cannot clip the footer */
-  padding: 40px 22px 60px;   /* bottom reserves room for the pinned footer */
+  /* Asymmetric on purpose: the content block is centred, so the only way
+     to lift it toward the top is to reserve more space below than above.
+     The bottom value also keeps the centred block clear of the pinned
+     footer. */
+  padding: 8px 22px 68px;
   overflow: hidden;
   background: radial-gradient(130% 70% at 50% 0%, #FFFFFF 0%, #F1F7FD 48%, #E6EFF9 100%);
 }
@@ -405,7 +409,7 @@ img { max-width: 100%; }
   flex-direction: column;
   width: 100%;
   gap: 12px;
-  margin-top: clamp(6px, 1.4vh, 20px);   /* see the desktop block */
+  margin-top: clamp(14px, 3vh, 32px);    /* see the desktop block */
   animation: up .8s cubic-bezier(.22,1,.36,1) 1.2s backwards;
 }
 
