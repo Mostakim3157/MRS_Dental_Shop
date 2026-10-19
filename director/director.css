@@ -1,0 +1,339 @@
+/* ============================================================
+   MRS Dental Shop — director's digital visiting card
+
+   Opened from the QR code on the printed card, so it is built
+   phone-first: one column, big tap targets. Colours and fonts
+   match the coming soon page (styles.css).
+   ============================================================ */
+
+:root {
+  --accent:        #F7941D;  /* logo orange */
+  --accent-deep:   #C25307;  /* orange, dark enough for icons on white */
+  --accent-alt:    #1570CD;  /* logo blue */
+  --accent-alt-dk: #0E5AA8;
+
+  --ink:           #0B2239;
+  --ink-soft:      #3C5670;
+  --ink-faint:     #4A627A;
+  --card-bg:       #FFFFFF;
+  --line:          rgba(11,34,57,.09);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: #F4F9FE;
+  color: var(--ink);
+  font-family: Manrope, "Segoe UI", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent-alt-dk); }
+a:hover { color: #0B4683; }
+
+img { max-width: 100%; }
+
+
+/* ============================================================
+   PAGE
+   ============================================================ */
+
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 28px 16px 72px;
+  overflow: hidden;
+  background: radial-gradient(130% 70% at 50% 0%, #FFFFFF 0%, #F1F7FD 48%, #E6EFF9 100%);
+}
+
+.aurora { position: absolute; inset: 0; pointer-events: none; }
+
+.blob { position: absolute; border-radius: 50%; filter: blur(56px); }
+
+.blob--a {
+  width: 360px; height: 360px; top: -120px; left: -110px; opacity: .32;
+  background: radial-gradient(circle, var(--accent) 0%, rgba(247,148,29,0) 68%);
+  animation: drift 22s ease-in-out infinite;
+}
+.blob--b {
+  width: 420px; height: 420px; bottom: -160px; right: -140px; opacity: .3;
+  background: radial-gradient(circle, var(--accent-alt) 0%, rgba(21,112,205,0) 68%);
+  animation: drift 28s ease-in-out infinite reverse;
+}
+
+@keyframes drift {
+  0%, 100% { transform: translate3d(0,0,0) scale(1); }
+  50%      { transform: translate3d(40px,-30px,0) scale(1.15); }
+}
+
+
+/* ============================================================
+   CARD
+   ============================================================ */
+
+.vcard {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 420px;
+  padding: 26px 20px 22px;
+  border: 1px solid rgba(21,112,205,.14);
+  border-radius: 28px;
+  background: rgba(255,255,255,.88);
+  box-shadow: 0 30px 60px -36px rgba(11,34,57,.55);
+  text-align: center;
+  animation: up .7s cubic-bezier(.22,1,.36,1) backwards;
+}
+
+.vcard__logo {
+  display: block;
+  width: 132px;
+  height: auto;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  margin-top: 18px;
+  border-radius: 50%;
+  padding: 4px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-alt) 100%);
+}
+
+.avatar img,
+.avatar__initials {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border: 3px solid #FFFFFF;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #EAF2FB;
+}
+
+.avatar__initials {
+  font-family: Sora, Manrope, sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--accent-alt-dk);
+}
+
+.vcard__name {
+  margin: 16px 0 0;
+  font-family: Sora, Manrope, sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -.01em;
+}
+
+.vcard__role {
+  margin: 6px 0 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+}
+
+.vcard__org {
+  margin: 4px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+
+/* ============================================================
+   SAVE CONTACT + QUICK ACTIONS
+   ============================================================ */
+
+.save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 54px;
+  margin-top: 22px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent-alt) 0%, var(--accent-alt-dk) 100%);
+  box-shadow: 0 14px 28px -18px rgba(14,90,168,.9);
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform .26s cubic-bezier(.22,1,.36,1);
+}
+.save:hover { color: #FFFFFF; }
+.save:active { transform: translateY(-2px); }
+.save svg { width: 20px; height: 20px; flex: none; }
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--card-bg);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform .26s cubic-bezier(.22,1,.36,1), border-color .26s ease;
+}
+.action:hover { color: var(--ink); border-color: rgba(21,112,205,.35); }
+.action:active { transform: translateY(-2px); }
+
+.action__icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.action__icon svg { width: 20px; height: 20px; }
+.action__icon--blue   { background: rgba(21,112,205,.1);  color: var(--accent-alt-dk); }
+.action__icon--orange { background: rgba(247,148,29,.14); color: var(--accent-deep); }
+
+.save:focus-visible,
+.action:focus-visible,
+.details a:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+
+/* ============================================================
+   DETAILS
+   ============================================================ */
+
+.details {
+  width: 100%;
+  margin: 20px 0 0;
+  text-align: left;
+}
+
+.details__row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 4px;
+  border-top: 1px solid var(--line);
+}
+
+.details dt {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.details dd {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.details a { text-decoration: none; }
+
+
+/* ============================================================
+   OFFICES — the navy band from the printed card
+   ============================================================ */
+
+.offices {
+  display: grid;
+  gap: 18px;
+  width: calc(100% + 40px);
+  margin: 6px -20px -22px;
+  padding: 22px 24px 24px;
+  border-radius: 0 0 28px 28px;
+  border-top: 3px solid var(--accent);
+  background: linear-gradient(135deg, #0D2F5E 0%, #123F7A 100%);
+  color: #FFFFFF;
+  text-align: left;
+}
+
+.office__name {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.office__addr {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.office__tel {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #FFFFFF;
+  text-decoration: none;
+}
+.office__tel:hover { color: #FFD9A8; }
+.office__tel:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 22px;
+  z-index: 1;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  color: var(--ink-faint);
+}
+
+@keyframes up {
+  0%   { opacity: 0; transform: translateY(18px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@media (min-width: 760px) {
+  .page { justify-content: center; padding-top: 48px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
