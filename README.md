@@ -15,7 +15,7 @@ The contact links are live:
 
 | What | Value |
 |---|---|
-| Facebook page | `https://www.facebook.com/share/1HQRiVQHAm/` |
+| Facebook page | `https://www.facebook.com/mrsdentalshop` |
 | WhatsApp | `+880 1822-392916` → `https://wa.me/8801822392916` |
 
 The WhatsApp link takes the number in international format with no `+`, spaces or
