@@ -67,9 +67,16 @@ director/director.css its styling (same colours and fonts as the main page)
 director/contact.vcf  the "Save contact" file
 ```
 
-The director's details appear in both `index.html` and `contact.vcf`, so when
-one changes, change the other too. The page is marked `noindex` so the phone
-number stays out of search results.
+The director's details appear in three places: the page itself, the script at
+the bottom of `director/index.html`, and `contact.vcf`. When one changes,
+change all three. The page is marked `noindex` so the phone number stays out of
+search results.
+
+**Save contact** works differently by phone. On Android the script turns the
+button into an `intent:` link that opens the Contacts app on a pre-filled new
+contact. Downloading a `.vcf` there hands it to whichever app claims contact
+files, which is often WhatsApp. Everywhere else, and on Android browsers that
+cannot open the link, the button opens `contact.vcf`.
 
 ## Updating the styles
 
