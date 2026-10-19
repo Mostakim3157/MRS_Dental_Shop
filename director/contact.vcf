@@ -1,12 +1,13 @@
 BEGIN:VCARD
 VERSION:3.0
-N:[Last name];[First name];;;
-FN:[Director Name]
+N:Rahman;Anis;;Md.;
+FN:Md. Anis Rahman
 ORG:MRS Dental Shop
-TITLE:Managing Director
-TEL;TYPE=CELL,VOICE:+8801XXXXXXXXX
-TEL;TYPE=WORK,VOICE:+8801822392916
-EMAIL;TYPE=INTERNET:[email@example.com]
-ADR;TYPE=WORK:;;[Shop address];Dhaka;;;Bangladesh
-URL:https://www.mrsdentalshop.com/director/
+TITLE:Director
+TEL;TYPE=CELL,VOICE:+8801822392916
+TEL;TYPE=WORK,VOICE:+8801755757771
+EMAIL;TYPE=INTERNET,WORK:mrsdentalshop@gmail.com
+ADR;TYPE=WORK:;Shop No. 111 (2nd Floor);Aziz Co-operative Super Market\, Shahbag;Dhaka;;1000;Bangladesh
+ADR;TYPE=WORK:;Kadam Mubarak Shopping Complex (1st Floor);40 Momin Road\, Anderkilla;Chittagong;;4000;Bangladesh
+URL:https://www.mrsdentalshop.com/
 END:VCARD

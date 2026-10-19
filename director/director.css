@@ -261,6 +261,51 @@ img { max-width: 100%; }
 
 
 /* ============================================================
+   OFFICES — the navy band from the printed card
+   ============================================================ */
+
+.offices {
+  display: grid;
+  gap: 18px;
+  width: calc(100% + 40px);
+  margin: 6px -20px -22px;
+  padding: 22px 24px 24px;
+  border-radius: 0 0 28px 28px;
+  border-top: 3px solid var(--accent);
+  background: linear-gradient(135deg, #0D2F5E 0%, #123F7A 100%);
+  color: #FFFFFF;
+  text-align: left;
+}
+
+.office__name {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.office__addr {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.office__tel {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #FFFFFF;
+  text-decoration: none;
+}
+.office__tel:hover { color: #FFD9A8; }
+.office__tel:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+
+/* ============================================================
    FOOTER
    ============================================================ */
 

@@ -59,7 +59,7 @@ certificate is only issued after it resolves.
 
 `director/` is the digital visiting card the QR code on the director's printed
 card points to. Encode `https://www.mrsdentalshop.com/director/` in the QR code
-(GitHub Pages also redirects `/director` without the slash).
+(the printed card uses `/director` without the slash; GitHub Pages redirects it).
 
 ```
 director/index.html   the card page
