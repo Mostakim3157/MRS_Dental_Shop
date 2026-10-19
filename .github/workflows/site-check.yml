@@ -1,0 +1,14 @@
+name: site check
+on:
+  push:
+    branches: [claude/tender-bardeen-3lra27]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Live files
+        run: |
+          echo "== director page headers"; curl -sSI https://www.mrsdentalshop.com/director/ | grep -iE "^(HTTP|last-modified|cache-control|age|x-cache|etag)"
+          echo "== director.css headers"; curl -sSI https://www.mrsdentalshop.com/director/director.css | grep -iE "^(HTTP|last-modified|cache-control|age|x-cache|etag)"
+          echo "== mobile label rule present in live CSS?"; curl -sS https://www.mrsdentalshop.com/director/director.css | grep -n "max-width: 759px" || echo "NOT FOUND"
+          echo "== logo in avatar present in live HTML?"; curl -sS https://www.mrsdentalshop.com/director/ | grep -n "avatar__logo\|mrsdentalshop\"" || echo "NOT FOUND"
