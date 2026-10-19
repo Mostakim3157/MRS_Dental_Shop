@@ -55,6 +55,22 @@ The four A records point the bare domain at GitHub, which then redirects to
 DNS usually propagates in minutes but can take up to 24 hours, and the HTTPS
 certificate is only issued after it resolves.
 
+## Director's card — `/director/`
+
+`director/` is the digital visiting card the QR code on the director's printed
+card points to. Encode `https://www.mrsdentalshop.com/director/` in the QR code
+(GitHub Pages also redirects `/director` without the slash).
+
+```
+director/index.html   the card page
+director/director.css its styling (same colours and fonts as the main page)
+director/contact.vcf  the "Save contact" file
+```
+
+The director's details appear in both `index.html` and `contact.vcf`, so when
+one changes, change the other too. The page is marked `noindex` so the phone
+number stays out of search results.
+
 ## Viewing it locally
 
 Open `index.html` directly in a browser, or serve the folder:

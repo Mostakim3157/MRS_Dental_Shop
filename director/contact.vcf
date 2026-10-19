@@ -1,0 +1,12 @@
+BEGIN:VCARD
+VERSION:3.0
+N:[Last name];[First name];;;
+FN:[Director Name]
+ORG:MRS Dental Shop
+TITLE:Managing Director
+TEL;TYPE=CELL,VOICE:+8801XXXXXXXXX
+TEL;TYPE=WORK,VOICE:+8801822392916
+EMAIL;TYPE=INTERNET:[email@example.com]
+ADR;TYPE=WORK:;;[Shop address];Dhaka;;;Bangladesh
+URL:https://www.mrsdentalshop.com/director/
+END:VCARD
