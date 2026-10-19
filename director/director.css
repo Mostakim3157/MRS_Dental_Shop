@@ -95,18 +95,11 @@ img { max-width: 100%; }
   animation: up .7s cubic-bezier(.22,1,.36,1) backwards;
 }
 
-.vcard__logo {
-  display: block;
-  width: 132px;
-  height: auto;
-}
-
 .avatar {
   display: grid;
   place-items: center;
-  width: 112px;
-  height: 112px;
-  margin-top: 18px;
+  width: 128px;
+  height: 128px;
   border-radius: 50%;
   padding: 4px;
   background: linear-gradient(135deg, var(--accent) 0%, var(--accent-alt) 100%);
@@ -122,6 +115,14 @@ img { max-width: 100%; }
   border-radius: 50%;
   object-fit: cover;
   background: #EAF2FB;
+}
+
+/* The logo is a wide JPG on white, so it is fitted inside the circle
+   rather than cropped to fill it. */
+.avatar .avatar__logo {
+  padding: 2px;
+  object-fit: contain;
+  background: #FFFFFF;
 }
 
 .avatar__initials {
