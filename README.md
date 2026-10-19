@@ -71,6 +71,14 @@ The director's details appear in both `index.html` and `contact.vcf`, so when
 one changes, change the other too. The page is marked `noindex` so the phone
 number stays out of search results.
 
+## Updating the styles
+
+Both pages link their stylesheet with a version number, e.g.
+`styles.css?v=20261019`. GitHub Pages lets browsers keep files for 10 minutes,
+so whenever you change `styles.css` or `director/director.css`, change the
+`?v=` number in the matching `index.html` to today's date. Visitors then get
+the new styles together with the new page instead of a stale cached copy.
+
 ## Viewing it locally
 
 Open `index.html` directly in a browser, or serve the folder:
