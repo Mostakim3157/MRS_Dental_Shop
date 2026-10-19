@@ -60,7 +60,11 @@
     <p class="vcard__role">Director</p>
     <p class="vcard__org">MRS Dental Shop</p>
 
-    <a class="save" href="contact.vcf" download="MRS-Dental-Shop-Director.vcf">
+    <!-- On Android the script at the bottom of the page swaps this link for
+         one that opens the phone's Contacts app directly. Everywhere else
+         (iPhone, desktop) it opens contact.vcf, which the browser offers to
+         add to contacts. -->
+    <a class="save" href="contact.vcf">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M19 8v6M22 11h-6"></path></svg>
       <span>Save contact</span>
     </a>
@@ -142,6 +146,32 @@
   <footer class="footer">&copy; 2026 MRS Dental Shop</footer>
 
 </main>
+
+<script>
+  // Android hands a downloaded .vcf to whichever app claims contact files,
+  // often WhatsApp. An intent: link asks the Contacts app itself for a new,
+  // pre-filled contact instead. Browsers that cannot launch it fall back to
+  // contact.vcf. Keep these details in step with contact.vcf.
+  (function () {
+    if (!/Android/i.test(navigator.userAgent)) return;
+    var save = document.querySelector('.save');
+    var fields = {
+      name: 'Md. Anis Rahman',
+      job_title: 'Director',
+      company: 'MRS Dental Shop',
+      phone: '+8801822392916',
+      secondary_phone: '+8801755757771',
+      email: 'mrsdentalshop@gmail.com',
+      postal: 'Shop No. 111 (2nd Floor), Aziz Co-operative Super Market, Shahbag, Dhaka - 1000, Bangladesh'
+    };
+    var extras = Object.keys(fields).map(function (k) {
+      return 'S.' + k + '=' + encodeURIComponent(fields[k]);
+    });
+    extras.push('S.browser_fallback_url=' + encodeURIComponent(save.href));
+    save.href = 'intent:#Intent;action=android.intent.action.INSERT;' +
+      'type=vnd.android.cursor.dir/contact;' + extras.join(';') + ';end';
+  })();
+</script>
 
 </body>
 </html>
